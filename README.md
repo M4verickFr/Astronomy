@@ -23,6 +23,11 @@ Pour notre projet, nous avons décidé de réaliser les tâches suivantes :
 
 ### Commandes utiles
 
+Lancer le programme: 
+```sh
+python src/Astronomy/__init__.py
+```
+
 Generer requirements.txt:     
 ```sh
 pip freeze > requirements.txt
@@ -44,9 +49,14 @@ Activer virtualenv linux:
 source env/bin/activate
 ```
 
+Autoriser ExecutionPolicy windows, a executer dans un powershell admin
+```sh
+Set-ExecutionPolicy Unrestricted -Force 
+```
+
 Activer virtualenv windows:   
 ```sh
-.\env\Scripts\activate
+.\env\Scripts\Activate.ps1
 ```
 
 Desactiver virtualenv linux:   
