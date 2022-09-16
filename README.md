@@ -25,7 +25,7 @@ Pour notre projet, nous avons décidé de réaliser les tâches suivantes :
 
 Lancer le programme: 
 ```sh
-python src/main.py
+python src/Astronomy/__init__.py
 ```
 
 Generer requirements.txt:     
