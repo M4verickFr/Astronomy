@@ -47,7 +47,7 @@ source env/bin/activate
 Activer virtualenv windows:   
 ```sh
 Set-ExecutionPolicy Unrestricted -Force
-.\env\Scripts\activate
+.\env\Scripts\Activate.ps1
 ```
 
 Desactiver virtualenv linux:   
