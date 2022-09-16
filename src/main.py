@@ -1,0 +1,3 @@
+import Astronomy
+
+Astronomy.main()
