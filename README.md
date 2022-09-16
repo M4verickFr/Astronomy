@@ -46,6 +46,7 @@ source env/bin/activate
 
 Activer virtualenv windows:   
 ```sh
+Set-ExecutionPolicy Unrestricted -Force
 .\env\Scripts\activate
 ```
 
