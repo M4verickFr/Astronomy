@@ -33,6 +33,12 @@ Installer requirements.txt:
 pip install -r requirements.txt
 ```
 
+Installer virtualenv [platform]
+```sh
+python3 -m pip install --user virtualenv
+python3 -m venv env
+```
+
 Activer virtualenv linux:     
 ```sh
 source env/bin/activate
