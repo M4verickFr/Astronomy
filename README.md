@@ -21,6 +21,13 @@ Pour notre projet, nous avons décidé de réaliser les tâches suivantes :
 - Installer requirements.txt
 - Developper
 
+### Avant de programmer
+
+- Réactiver le virtual env
+- Git pull
+- Installer les requirements
+- Programmer 
+
 ### Commandes utiles
 
 Lancer le programme: 
