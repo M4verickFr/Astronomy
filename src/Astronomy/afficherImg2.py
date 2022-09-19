@@ -8,7 +8,7 @@ import imutils
 import cv2
 
 
-fits_file = 'https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=23+24.8&d=+15+17&h=10&w=10&f=fits'
+fits_file = 'https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=11+23.8&d=-02+06&h=10&w=10&f=fits'
 image_file = download_file(fits_file, cache=True)
 hdu = fits.open(image_file)[0]
 wmap = WCS(hdu.header)
