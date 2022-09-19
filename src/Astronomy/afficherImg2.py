@@ -28,38 +28,26 @@ c = max(cnts, key=cv2.contourArea)
 
 
 # Draw contours with maximum size on new mask
-mask2 = np.zeros_like(thresh_gray)
+mask1 = np.zeros_like(thresh_gray)
 ellipse = cv2.fitEllipse(c)
-mask2=cv2.ellipse(mask2, ellipse, (36,255,12), -1)
+mask1=cv2.ellipse(mask1, ellipse, (36,255,12), -1)
 
-img[(mask2==0)] = 0
+# Smooth mask
+kernel = np.ones((10, 10), 'uint8')
+mask2 = cv2.dilate(mask1, kernel, iterations=1)
+mask2 = cv2.distanceTransform(mask2, cv2.DIST_L2, 3)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# apply mask
+data = data * mask2
 
 plt.subplot(1, 2, 1,projection=wmap)
-plt.imshow(data)
+plt.imshow(img)
 plt.title('Full image')
 plt.xlabel("RA")
 plt.ylabel("Dec")
 
 plt.subplot(1, 2, 2,projection=wmap)
-plt.imshow(img)
+plt.imshow(data)
 plt.title('xxx')
 plt.xlabel("RA")
 plt.ylabel(" ")
