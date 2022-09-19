@@ -8,10 +8,10 @@ import imutils
 import cv2
 
 
-fits_file = 'https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=09+09.6&d=+33+08&h=10&w=10&f=fits'
+fits_file = 'https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=03+44.4&d=-44+40&h=10&w=10&f=fits'
 image_file = download_file(fits_file, cache=True)
 hdu = fits.open(image_file)[0]
-wmap = WCS(hdu.header)
+# wmap = WCS(hdu.header)
 data = hdu.data
 
 img = np.array(data/255, dtype = np.uint8) #Converting float32 to uint8
