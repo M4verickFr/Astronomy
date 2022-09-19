@@ -26,7 +26,6 @@ cnts = imutils.grab_contours(cnts)
 
 c = max(cnts, key=cv2.contourArea)
 
-
 # Draw contours with maximum size on new mask
 mask1 = np.zeros_like(thresh_gray)
 ellipse = cv2.fitEllipse(c)
@@ -40,14 +39,24 @@ mask2 = cv2.distanceTransform(mask2, cv2.DIST_L2, 3)
 # apply mask
 data = data * mask2
 
-plt.subplot(1, 2, 1,projection=wmap)
+# Extract region
+x,y,w,h = cv2.boundingRect(c)
+region = data[y-10:y+h+10, x-10:x+w+10]
+
+plt.subplot(1, 3, 1,projection=wmap)
 plt.imshow(img)
 plt.title('Full image')
 plt.xlabel("RA")
 plt.ylabel("Dec")
 
-plt.subplot(1, 2, 2,projection=wmap)
+plt.subplot(1, 3, 2,projection=wmap)
 plt.imshow(data)
+plt.title('xxx')
+plt.xlabel("RA")
+plt.ylabel(" ")
+
+plt.subplot(1, 3, 3,projection=wmap)
+plt.imshow(region)
 plt.title('xxx')
 plt.xlabel("RA")
 plt.ylabel(" ")
