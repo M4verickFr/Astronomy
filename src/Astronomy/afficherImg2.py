@@ -45,7 +45,7 @@ region = data[y-10:y+h+10, x-10:x+w+10]
 # Export fits
 hdu = fits.PrimaryHDU(region)
 hdul = fits.HDUList([hdu])
-hdul.writeto('data/new.fits', overwrite=True)
+#hdul.writeto('data/new.fits', overwrite=True)
 
 plt.subplot(1, 3, 1,projection=wmap)
 plt.imshow(img)
