@@ -6,8 +6,7 @@ from astropy.utils.data import download_file
 from astropy.io import fits
 
 def coordinateToUrl(r, x):
-
-    return None  
+    return f"https://archive.stsci.edu/cgi-bin/dss_search?v=3&r={r}&d={x}&h=12&w=12&f=fits"  
 
 def getImages(path):
     image_file = download_file('http://data.astropy.org/tutorials/FITS-images/HorseHead.fits', cache=True )
@@ -19,22 +18,31 @@ def displayImage(image_file):
     plt.colorbar()
 
 if __name__ == "__main__":
-    url = "https://archive.stsci.edu/cgi-bin/dss_search\?v\=3\&r\=13+39+53.2\&d\=-31+40+15.0\&h\=10.0\&w\=10.0\&f\=fits"
+    all_images = []
     for i in range(-900, 900, 2):
-        r = 0
+        r = 0.01
         x= i/10
         step = 0.2 + 5.478128918342 * (10**-36) * np.exp(0.938859*np.abs(x))
-        if 77.5<x<87.5:
-            step+=(0.2*x-15.5)
-
+        if 77.5<np.abs(x)<87.5:
+            step+=(0.2*np.abs(x)-15.5)
+        drap=0
         while(r < 360):
             # Récupérer l'image
-            coordinateToUrl(r, i)
-            image_file = getImages("url")
+            url = coordinateToUrl(r, x)
+            print(url)
+            all_images.append(getImages(url))
+            '''
+            drap += 1
+            if(drap > 5):
+                break
+            '''
 
             # Incrémentation
             r += step
     
-    
-    
-    displayImage(image_file)
+    fig = plt.figure(figsize = (16,16))
+
+    for i in range(len(all_images)):
+        plt.subplot(3,2,i+1)
+        displayImage(all_images[i])
+    plt.show()
