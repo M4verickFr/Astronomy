@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Description')
-    parser.add_argument('-c','--create', help='Description', required=False, action='store_true')
+    parser.add_argument('-c','--create', help='Description', required=False)
     parser.add_argument('-g','--get', help='Description', required=False)
     args = vars(parser.parse_args())
     return args
