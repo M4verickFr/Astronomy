@@ -8,7 +8,7 @@ from astropy.io import fits
 def coordinateToUrl(r, x):
     return f"https://archive.stsci.edu/cgi-bin/dss_search?v=3&r={r}&d={x}+0&h=10&w=10&f=fits"  
 
-def download_on_fits(url, location):
+def download_one_fits(url, location):
     image_file = download_file(url, cache=True, pkgname=location)
     return image_file
 
