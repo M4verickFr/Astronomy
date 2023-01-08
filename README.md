@@ -10,9 +10,9 @@ Presentation du projet
 ### Les taches
 
 Pour notre projet, nous avons décidé de réaliser les tâches suivantes : 
-- T1 : Tache 1
-- T2 : Tache 2
-- T3 : Tache 3
+- T1 : Récuprer les données
+- T2 : Traiter les données
+- T3 : Afficher les données
 
 ### Installation du projet
 

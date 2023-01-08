@@ -17,7 +17,6 @@ hdu = fits.open(image_file)[0]
 wmap = WCS(hdu.header)
 data = hdu.data
 
-
 img = np.array(data/255, dtype = np.uint8) #Converting float32 to uint8
 
 # Apply adaptive threshold with gaussian size 51x51
