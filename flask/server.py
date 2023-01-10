@@ -2,6 +2,7 @@
 import os
 
 import docker
+from docker.types import Mount
 docker_client = docker.from_env()
 
 from flask import Flask, render_template, jsonify, request, json, send_from_directory
@@ -93,12 +94,15 @@ def convert_supernovas():
     )
 
     for x in range(max_containers - len(containers)):
-        docker_client.containers.run(
-            image = image.id,
-            auto_remove = auto_remove,
-            detach = True,
-            network = 'astronomy_default'
-        )
+        # docker_client.containers.run(
+        #     image = image.id,
+        #     auto_remove = auto_remove,
+        #     detach = True,
+        #     network = 'astronomy_default',
+        #     volumes={'/test:dir': {'bind': '/test'}}
+        # )
+
+        os.system(f"docker run --detach --network=astronomy_default -v data:/data {image_tag}")
 
     containers = list(map(lambda container: container.name, containers))
 

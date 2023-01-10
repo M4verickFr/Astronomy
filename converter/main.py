@@ -12,19 +12,22 @@ import cv2
 import skimage.exposure
 import operator
 
-client = MongoClient("mongo:27017")
-db = client.Spativis
-sn_collection = db["supernovas"]
 
-try:
-    client.admin.command('ismaster')
-except:
-    print("Server not available")
-    exit()
+debug = "https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=13+39+53.2&d=-31+40+15.0&h=10.0&w=10.0&f=fits"
+
+# client = MongoClient("mongo:27017")
+# db = client.Spativis
+# sn_collection = db["supernovas"]
+
+# try:
+#     client.admin.command('ismaster')
+# except:
+#     print("Server not available")
+#     exit()
 
 # Get supernova to convert
-sn = sn_collection.find_one({'name': '2015bh'})
-print(sn)
+# sn = sn_collection.find_one({'name': '2015bh'})
+# print(sn)
 
 # Download fits file of supernova
 fits_file = 'https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=13+39+53.2&d=-31+40+15.0&h=10.0&w=10.0&f=fits'
@@ -60,9 +63,9 @@ region = data[y-10:y+h+10, x-10:x+w+10]
 # Export fits
 hdu = fits.PrimaryHDU(region)
 hdul = fits.HDUList([hdu])
-#hdul.writeto('data/new.fits', overwrite=True)
+hdul.writeto('data/new.fits', overwrite=True)
 
-if (debug):
+if ("debug" in locals()):
     plt.subplot(1, 3, 1,projection=wmap)
     plt.imshow(img)
     plt.title('Full image')
