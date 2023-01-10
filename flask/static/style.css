@@ -126,3 +126,7 @@ body {
     width: 80px;
     font-size: 20px;
  }
+
+ tr:hover{
+    cursor:pointer;
+ }
