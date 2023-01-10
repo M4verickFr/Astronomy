@@ -1,90 +1,80 @@
-# 🔆 PROJ 932 - Astronomy
+# Spativis
 
-Le but de ce projet est de réaliser un projet
+## Compose sample application
 
-## Astronomy
+### Use with Docker Development Environments
 
-### Présentation
-Presentation du projet
+You can open this sample in the Dev Environments feature of Docker Desktop version 4.12 or later.
 
-### Les taches
+[Open in Docker Dev Environments <img src="../open_in_new.svg" alt="Open in Docker Dev Environments" align="top"/>](https://open.docker.com/dashboard/dev-envs?url=https://github.com/docker/awesome-compose/tree/master/nginx-flask-mongo)
 
-Pour notre projet, nous avons décidé de réaliser les tâches suivantes : 
-- T1 : Récuprer les données
-- T2 : Traiter les données
-- T3 : Afficher les données
+### Python/Flask application with Nginx proxy and a Mongo database
 
-### Installation du projet
+Project structure:
+```
+.
+├── compose.yaml
+├── flask
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── server.py
+└── nginx
+    └── nginx.conf
 
-- Cloner le projet
-- Activer virtualenv [platform]
-- Installer requirements.txt
-- Developper
-
-### Avant de programmer
-
-- Réactiver le virtual env
-- Git pull
-- Installer les requirements
-- Programmer 
-
-### Commandes utiles
-
-Lancer le programme: 
-```sh
-python src/Astronomy/__init__.py
 ```
 
-Generer requirements.txt:     
-```sh
-pip freeze > requirements.txt
+[_compose.yaml_](compose.yaml)
+```
+services:
+  web:
+    build: app
+    ports:
+    - 80:80
+  backend:
+    build: flask
+    ...
+  mongo:
+    image: mongo
+```
+The compose file defines an application with three services `web`, `backend` and `db`.
+When deploying the application, docker compose maps port 80 of the web service container to port 80 of the host as specified in the file.
+Make sure port 80 on the host is not being used by another container, otherwise the port should be changed.
+
+## Deploy with docker compose
+
+```
+$ docker compose up -d
+Creating network "nginx-flask-mongo_default" with the default driver
+Pulling mongo (mongo:)...
+latest: Pulling from library/mongo
+423ae2b273f4: Pull complete
+...
+...
+Status: Downloaded newer image for nginx:latest
+Creating nginx-flask-mongo_mongo_1 ... done
+Creating nginx-flask-mongo_backend_1 ... done
+Creating nginx-flask-mongo_web_1     ... done
+
 ```
 
-Installer requirements.txt:   
-```sh
-pip install -r requirements.txt
+## Expected result
+
+Listing containers must show three containers running and the port mapping as below:
+```
+$ docker ps
+CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS              PORTS                  NAMES
+a0f4ebe686ff        nginx                       "/bin/bash -c 'envsu…"   About a minute ago   Up About a minute   0.0.0.0:80->80/tcp     nginx-flask-mongo_web_1
+dba87a080821        nginx-flask-mongo_backend   "./server.py"            About a minute ago   Up About a minute                          nginx-flask-mongo_backend_1
+d7eea5481c77        mongo                       "docker-entrypoint.s…"   About a minute ago   Up About a minute   27017/tcp              nginx-flask-mongo_mongo_1
 ```
 
-Installer virtualenv [platform]
-```sh
-python3 -m pip install --user virtualenv
-python3 -m venv env
+After the application starts, navigate to `http://localhost:80` in your web browser or run:
+```
+$ curl localhost:80
+Hello from the MongoDB client!
 ```
 
-Activer virtualenv linux:     
-```sh
-source env/bin/activate
+Stop and remove the containers
 ```
-
-Autoriser ExecutionPolicy windows, a executer dans un powershell admin
-```sh
-Set-ExecutionPolicy Unrestricted -Force 
+$ docker compose down
 ```
-
-Activer virtualenv windows:   
-```sh
-.\env\Scripts\Activate.ps1
-```
-
-Desactiver virtualenv linux:   
-```sh
-deactivate
-```
-
-Build le projet:              
-```sh
-python -m build --wheel
-```
-
-
-## 🏗️ **Developed with**
-
-* [Python](https://www.python.org/)
-
-## 💪 **Authors of this project**
-
-* **PERROLLAZ Maverick** _alias_ [@M4verickFr](https://github.com/M4verickFr)
-* **KOEBERLE Celien** _alias_ [@koeberlc](https://github.com/koeberlc)
-* **THEZE Doriane** _alias_ [@thezedoriane](https://github.com/thezedoriane)
-* **YAO Xin** _alias_ [@Xin-YAO1](https://github.com/Xin-YAO1)
-
