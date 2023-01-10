@@ -4,6 +4,7 @@ import docker
 
 from flask import Flask, render_template, jsonify, request, json
 from pymongo import MongoClient
+
 app = Flask(__name__)
 
 client = MongoClient("mongo:27017")
@@ -46,7 +47,7 @@ def resource_not_found(e):
 #####                API                   #####
 ################################################
 @app.route('/api/extract_sn', methods=['GET'])
-def extract_new_supernova():
+def extract_new_supernova():  
     # Check if the extract script is running
     process = os.popen('ps -ef | grep extract.py | grep -v grep').read()
     
@@ -67,11 +68,14 @@ def extract_new_supernova():
 
 @app.route('/api/sn', methods=['GET'])
 def list_supernovas(): # TODO
-    sn = sn_collection.find()
+    sn = sn_collection.find({},{"_id":0})
+
     if not sn:
         return jsonify({'error': 'data not found'})
     
-    return jsonify(list(sn))
+    t_sn = list(sn)
+
+    return jsonify(t_sn)
 
 @app.route('/api/sn', methods=['PUT'])
 def create_record(): # TODO
