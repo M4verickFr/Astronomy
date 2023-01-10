@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import os
+
 import docker
+docker_client = docker.from_env()
 
 from flask import Flask, render_template, jsonify, request, json
 from pymongo import MongoClient
@@ -47,7 +49,7 @@ def resource_not_found(e):
 #####                API                   #####
 ################################################
 @app.route('/api/extract_sn', methods=['GET'])
-def extract_new_supernova():  
+def extract_new_supernova():
     # Check if the extract script is running
     process = os.popen('ps -ef | grep extract.py | grep -v grep').read()
     
@@ -60,6 +62,39 @@ def extract_new_supernova():
     
     return jsonify({'status': 'process started', 'output': output})
     
+
+@app.route('/api/convert_sn', methods=['GET'])
+def convert_supernovas():
+
+    image_tag = 'spativis-converter'
+    max_containers = int(request.args.get('max_containers') or 10); 
+
+    containers = docker_client.containers.list(
+        filters = {
+            'ancestor': image_tag
+        }
+    )
+
+    if (len(containers) > max_containers): 
+        return jsonify({'error': 'too much containers already running'})
+
+    
+    image, log = docker_client.images.build(
+        path = '/converter/',
+        dockerfile = '/converter/Dockerfile',
+        tag = image_tag
+    )
+
+    for x in range(max_containers - len(containers)):
+        docker_client.containers.run(
+            image = image.id,
+            auto_remove = True,
+            detach = True
+        )
+
+    containers = list(map(lambda container: container.name, containers))
+
+    return jsonify(containers)
 
 
 ################################################
