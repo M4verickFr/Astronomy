@@ -4,7 +4,7 @@ import os
 import docker
 docker_client = docker.from_env()
 
-from flask import Flask, render_template, jsonify, request, json
+from flask import Flask, render_template, jsonify, request, json, send_from_directory
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -33,6 +33,10 @@ def viewer():
 @app.route('/supernovas')
 def supernovas():
     return render_template('supernovas.html')
+
+@app.route('/data/<path:filename>')
+def data(filename):
+    return send_from_directory('data', filename)
 
 ################################################
 #####               ERROR                  #####
@@ -65,9 +69,13 @@ def extract_new_supernova():
 
 @app.route('/api/convert_sn', methods=['GET'])
 def convert_supernovas():
-
     image_tag = 'spativis-converter'
+    auto_remove = request.args.get('auto_remove') or ""
+    auto_remove =  False if auto_remove.lower() == "false" else True
     max_containers = int(request.args.get('max_containers') or 10); 
+
+    if (max_containers > 20):
+        return jsonify({'error': 'max_containers too hight'})
 
     containers = docker_client.containers.list(
         filters = {
@@ -77,7 +85,6 @@ def convert_supernovas():
 
     if (len(containers) > max_containers): 
         return jsonify({'error': 'too much containers already running'})
-
     
     image, log = docker_client.images.build(
         path = '/converter/',
@@ -88,8 +95,9 @@ def convert_supernovas():
     for x in range(max_containers - len(containers)):
         docker_client.containers.run(
             image = image.id,
-            auto_remove = True,
-            detach = True
+            auto_remove = auto_remove,
+            detach = True,
+            network = 'astronomy_default'
         )
 
     containers = list(map(lambda container: container.name, containers))
