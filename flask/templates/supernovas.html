@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="presentation w-100">
+        <h1>Supernovas</h1>
+        <p>Here are the supernovas that have been discovered by the LSST.</p>
+        
+        <!-- Loading -->
+        <div class="loading mt-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>  
+    </div>
+
+    <script src="{{ url_for('static', filename='supernovas.js') }}"></script>
+
+{% endblock %}
