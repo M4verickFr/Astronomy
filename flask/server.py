@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 import os
-import docker
 
-from flask import Flask, render_template, jsonify, request, json
+import docker
+docker_client = docker.from_env()
+
+from flask import Flask, render_template, jsonify, request, json, send_from_directory
 from pymongo import MongoClient
+
 app = Flask(__name__)
 
 client = MongoClient("mongo:27017")
@@ -30,6 +33,10 @@ def viewer():
 @app.route('/supernovas')
 def supernovas():
     return render_template('supernovas.html')
+
+@app.route('/data/<path:filename>')
+def data(filename):
+    return send_from_directory('data', filename)
 
 ################################################
 #####               ERROR                  #####
@@ -60,6 +67,43 @@ def extract_new_supernova():
     return jsonify({'status': 'process started', 'output': output})
     
 
+@app.route('/api/convert_sn', methods=['GET'])
+def convert_supernovas():
+    image_tag = 'spativis-converter'
+    auto_remove = request.args.get('auto_remove') or ""
+    auto_remove =  False if auto_remove.lower() == "false" else True
+    max_containers = int(request.args.get('max_containers') or 10); 
+
+    if (max_containers > 20):
+        return jsonify({'error': 'max_containers too hight'})
+
+    containers = docker_client.containers.list(
+        filters = {
+            'ancestor': image_tag
+        }
+    )
+
+    if (len(containers) > max_containers): 
+        return jsonify({'error': 'too much containers already running'})
+    
+    image, log = docker_client.images.build(
+        path = '/converter/',
+        dockerfile = '/converter/Dockerfile',
+        tag = image_tag
+    )
+
+    for x in range(max_containers - len(containers)):
+        docker_client.containers.run(
+            image = image.id,
+            auto_remove = auto_remove,
+            detach = True,
+            network = 'astronomy_default'
+        )
+
+    containers = list(map(lambda container: container.name, containers))
+
+    return jsonify(containers)
+
 
 ################################################
 #####              API SN                  #####
@@ -67,11 +111,14 @@ def extract_new_supernova():
 
 @app.route('/api/sn', methods=['GET'])
 def list_supernovas(): # TODO
-    sn = sn_collection.find()
+    sn = sn_collection.find({},{"_id":0})
+
     if not sn:
         return jsonify({'error': 'data not found'})
     
-    return jsonify(list(sn))
+    t_sn = list(sn)
+
+    return jsonify(t_sn)
 
 @app.route('/api/sn', methods=['PUT'])
 def create_record(): # TODO

@@ -14,7 +14,7 @@
     <script type="text/javascript">
         const aladin = A.aladin('#aladin-lite-div', { cooFrame: 'galactic', fov: 110, target: 'galactic center', showSimbadPointerControl: true });
         aladin.setBaseImageLayer('P/Mellinger/color');
-        aladin.setOverlayImageLayer(aladin.createImageSurvey("Data", "Data", "static/data/DataHiPS", "equatorial", 9, { imgFormat: "png" }));
+        aladin.setOverlayImageLayer(aladin.createImageSurvey("Data", "Data", "data/DataHiPS", "equatorial", 9, { imgFormat: "png" }));
         aladin.getOverlayImageLayer().setAlpha(1.0);
 
         // var hips = A.catalogHiPS('http://localhost:8000/DataHiPS', {onClick: 'showTable', name: 'Catalog'});
