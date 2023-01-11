@@ -3,6 +3,8 @@
 from pymongo import MongoClient
 from matplotlib import pyplot as plt
 
+from utils import *
+
 from astropy.io import fits
 from astropy.wcs import WCS
 from astropy.utils.data import download_file
@@ -11,7 +13,7 @@ import imutils
 import cv2
 import skimage.exposure
 import operator
-
+import time
 
 debug = "https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=13+39+53.2&d=-31+40+15.0&h=10.0&w=10.0&f=fits"
 
@@ -30,8 +32,7 @@ debug = "https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=13+39+53.2&d=-31+40+
 # print(sn)
 
 # Download fits file of supernova
-fits_file = 'https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=13+39+53.2&d=-31+40+15.0&h=10.0&w=10.0&f=fits'
-image_file = download_file(fits_file, cache=True)
+image_file = download_file(get_fits_path(r, d), cache=True)
 hdu = fits.open(image_file)[0]
 wmap = WCS(hdu.header)
 data = hdu.data
@@ -63,7 +64,7 @@ region = data[y-10:y+h+10, x-10:x+w+10]
 # Export fits
 hdu = fits.PrimaryHDU(region)
 hdul = fits.HDUList([hdu])
-hdul.writeto('data/new.fits', overwrite=True)
+hdul.writeto('/data/image2.fits', overwrite=True)
 
 if ("debug" in locals()):
     plt.subplot(1, 3, 1,projection=wmap)

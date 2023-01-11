@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 import os
 
-import docker
-from docker.types import Mount
-docker_client = docker.from_env()
-
-from flask import Flask, render_template, jsonify, request, json, send_from_directory
+from flask import Flask, render_template, jsonify, request, json, send_from_directory, escape
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -37,7 +33,7 @@ def supernovas():
 
 @app.route('/data/<path:filename>')
 def data(filename):
-    return send_from_directory('data', filename)
+    return send_from_directory('/data', filename)
 
 ################################################
 #####               ERROR                  #####
@@ -78,35 +74,19 @@ def convert_supernovas():
     if (max_containers > 20):
         return jsonify({'error': 'max_containers too hight'})
 
-    containers = docker_client.containers.list(
-        filters = {
-            'ancestor': image_tag
-        }
-    )
-
-    if (len(containers) > max_containers): 
+    nb_containers = int(os.popen(f"docker container ls -q -f ancestor={image_tag} | wc -l").read())
+    if (nb_containers > max_containers): 
         return jsonify({'error': 'too much containers already running'})
-    
-    image, log = docker_client.images.build(
-        path = '/converter/',
-        dockerfile = '/converter/Dockerfile',
-        tag = image_tag
-    )
 
-    for x in range(max_containers - len(containers)):
-        # docker_client.containers.run(
-        #     image = image.id,
-        #     auto_remove = auto_remove,
-        #     detach = True,
-        #     network = 'astronomy_default',
-        #     volumes={'/test:dir': {'bind': '/test'}}
-        # )
+    os.system(f"docker build /converter/ -t {image_tag}:latest")
+    source_path = os.popen('docker inspect -f \'{{ range .Mounts }}{{ if eq .Destination "/data" }}{{ .Source }}{{ end }}{{ end }}\' $(docker container ls -q -f name=astronomy-backend)').read().strip()
 
-        os.system(f"docker run --detach --network=astronomy_default -v data:/data {image_tag}")
+    for x in range(max_containers - nb_containers):
+        os.system(f"docker run --detach --network=astronomy_default -v {source_path}:/data {image_tag}")
 
-    containers = list(map(lambda container: container.name, containers))
+    containers = os.popen(f"docker container ls -q -f ancestor={image_tag}").read()
 
-    return jsonify(containers)
+    return {'success': 'Docker stated', 'containers': containers.split("\n")[:-1]}
 
 
 ################################################
