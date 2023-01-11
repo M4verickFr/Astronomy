@@ -13,26 +13,25 @@ import imutils
 import cv2
 import skimage.exposure
 import operator
-import time
+import json
 
-debug = "https://archive.stsci.edu/cgi-bin/dss_search?v=3&r=13+39+53.2&d=-31+40+15.0&h=10.0&w=10.0&f=fits"
+# Setup MongoDB client
+client = MongoClient("mongo:27017")
+db = client.Spativis
+sn_collection = db["supernovas"]
 
-# client = MongoClient("mongo:27017")
-# db = client.Spativis
-# sn_collection = db["supernovas"]
-
-# try:
-#     client.admin.command('ismaster')
-# except:
-#     print("Server not available")
-#     exit()
+try:
+    client.admin.command('ismaster')
+except:
+    print("Server not available")
+    exit()
 
 # Get supernova to convert
-# sn = sn_collection.find_one({'name': '2015bh'})
-# print(sn)
+sn = sn_collection.find_one({'name': '2015ay'})
+print(sn['url'])
 
 # Download fits file of supernova
-image_file = download_file(get_fits_path(r, d), cache=True)
+image_file = download_file(sn['url'], cache=True)
 hdu = fits.open(image_file)[0]
 wmap = WCS(hdu.header)
 data = hdu.data
@@ -64,25 +63,4 @@ region = data[y-10:y+h+10, x-10:x+w+10]
 # Export fits
 hdu = fits.PrimaryHDU(region)
 hdul = fits.HDUList([hdu])
-hdul.writeto('/data/image2.fits', overwrite=True)
-
-if ("debug" in locals()):
-    plt.subplot(1, 3, 1,projection=wmap)
-    plt.imshow(img)
-    plt.title('Full image')
-    plt.xlabel("RA")
-    plt.ylabel("Dec")
-
-    plt.subplot(1, 3, 2,projection=wmap)
-    plt.imshow(data)
-    plt.title('xxx')
-    plt.xlabel("RA")
-    plt.ylabel(" ")
-
-    plt.subplot(1, 3, 3,projection=wmap)
-    plt.imshow(region)
-    plt.title('xxx')
-    plt.xlabel("RA")
-    plt.ylabel(" ")
-
-    plt.show()
+hdul.writeto('/data/image.fits', overwrite=True)
