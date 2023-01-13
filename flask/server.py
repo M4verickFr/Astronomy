@@ -25,6 +25,9 @@ def index():
 
 @app.route('/viewer')
 def viewer():
+    if (request.args.get('v') or request.args.get('version')) == "3":
+        return render_template('viewer_v3.html') 
+    
     return render_template('viewer.html')
 
 @app.route('/supernovas')
