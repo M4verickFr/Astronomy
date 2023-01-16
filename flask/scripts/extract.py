@@ -1,19 +1,21 @@
 #!/usr/bin/env python
 
+import time
+#!/usr/bin/env python
 import os
 
 from pymongo import MongoClient
+
+from operator import itemgetter
+
+import sqlite3
 import argparse
 import requests
 import json
 from bs4 import BeautifulSoup
 
-def parse_args():
-    parser = argparse.ArgumentParser(description='Description')
-    parser.add_argument('-c','--create', help='Description', required=False)
-    parser.add_argument('-g','--get', help='Description', required=False)
-    args = vars(parser.parse_args())
-    return args
+
+
 
 def parse_web():
     response = requests.get("http://www.cbat.eps.harvard.edu/lists/Supernovae.html")
@@ -21,14 +23,19 @@ def parse_web():
     contents = soup.find("pre").contents
 
     table = {}
-
+    
     i = 1
     while (i < len(contents)):
         if (contents[i].name == "a" and contents[i].has_attr("name")):
             try:
                 name = contents[i].attrs["name"]
                 info = contents[i+1]
-
+                if(name == "2015bh"):
+                    print(True)
+                if(name == lastName):
+                    print(name)
+                    break
+                
                 ra = info[31:38].lstrip().rstrip()
                 decl = info[39:45].lstrip().rstrip()
 
@@ -58,32 +65,34 @@ def parse_web():
 
     return table
 
-def create_database(table):
-    client = MongoClient("mongo:27017")
-    db = client.Spativis
-    sn_collection = db["supernovas"]
 
+def create_database(table):
+    
+    #print(table)
     sn_list = []
     for name, sn in table.items():
         sn_list.append(sn)
     
-    sn_collection.insert_many(sn_list)
+    if(sn_list):
+        sn_collection.insert_many(sn_list)
 
 def export_json(table):
     with open('src/Astronomy/data/table.json', 'w') as fp:
         json.dump(table, fp, indent=4)
 
 
-if __name__ == "__main__":
-    args = parse_args()
-
-    if (args["create"] != None): 
-        table = parse_web()
-        create_database(table)
-        
-        if (args["create"] == "json"):
-            export_json(table)
+client = MongoClient("mongo:27017")
+db = client.Spativis
+sn_collection = db["supernovas"]
 
 
+list_ex = list(sn_collection.find({},{"_id":0}))
+lastName = ""
+try:
+    lastName = sorted(list_ex, key=lambda d: d['name'], reverse=True)[0]
+except:
+    ""
+print(lastName)
 
 create_database(parse_web())
+    

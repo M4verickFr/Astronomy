@@ -1,44 +1,44 @@
 <!doctype html>
 <html lang="en">
-<head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<title>Spativis</title>
-</head>
-<body class="text-center d-flex">
-	<div class="d-flex h-100 w-100 p-3 mx-auto flex-column px-5 align-items-center justify-content-between">
-		<header class="masthead w-75">
-			<div class="inner">
-				<h3 class="masthead-brand">Spativis</h3>
-				<nav class="nav nav-masthead justify-content-center">
-					<a class="nav-link {{ 'active' if request.endpoint == 'index' else '' }}" href="{{ url_for('index') }}">Home</a>
-					<a class="nav-link {{ 'active' if request.endpoint == 'viewer' else '' }}" href="{{ url_for('viewer') }}">Viewer</a>
-					<a class="nav-link {{ 'active' if request.endpoint == 'supernovas' else '' }}" href="{{ url_for('supernovas') }}">Supernova</a>
-				</nav>
-			</div>
-		</header>
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		
-		<main class="d-flex justify-content-center">
-			{% for message in get_flashed_messages() %}
-			<div class="alert alert-danger">{{ message }}</div>
-			{% endfor %}
-			{% block content %} {% endblock %}
-		</main>
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-		<footer>Made with ❤ by <span title="Celien">👩‍🚀</span><span title="Doriane">👨‍🚀</span><span title="Maverick">👨‍🚀</span><span title="Xin">👨‍🚀</span></footer> <!-- TODO: Upgrade this with css -->
-	</div>
-</body>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<title>Spativis</title>
+	</head>
+	<body class="text-center d-flex">
+		<div class="d-flex h-100 w-100 p-3 mx-auto flex-column px-5 align-items-center justify-content-between">
+			<header class="masthead w-75">
+				<div class="inner">
+					<h3 class="masthead-brand">Spativis</h3>
+					<nav class="nav nav-masthead justify-content-center">
+						<a class="nav-link {{ 'active' if request.endpoint == 'index' else '' }}" href="{{ url_for('index') }}">Home</a>
+						<a class="nav-link {{ 'active' if request.endpoint == 'viewer' else '' }}" href="{{ url_for('viewer') }}">Viewer</a>
+						<a class="nav-link {{ 'active' if request.endpoint == 'supernovas' else '' }}" href="{{ url_for('supernovas') }}">Supernova</a>
+					</nav>
+				</div>
+			</header>
+			
+			<main class="d-flex justify-content-center">
+				{% for message in get_flashed_messages() %}
+				<div class="alert alert-danger">{{ message }}</div>
+				{% endfor %}
+				{% block content %} {% endblock %}
+			</main>
+
+			<footer>Made with ❤ by <span title="Celien">👩‍🚀</span><span title="Doriane">👨‍🚀</span><span title="Maverick">👨‍🚀</span><span title="Xin">👨‍🚀</span></footer> <!-- TODO: Upgrade this with css -->
+		</div>
+	</body>
 </html>
 

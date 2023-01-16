@@ -39,6 +39,9 @@ $.ajax({
 
             //$("#table-supernovae").DataTable()
 
+            $("#table-supernovae").removeClass("hidden")
+            $("#loading").removeClass("hidden").addClass("hidden")
+
         }
     },
 })
