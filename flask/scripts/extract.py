@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import time
-#!/usr/bin/env python
 import os
 
 from pymongo import MongoClient
@@ -65,7 +64,10 @@ def parse_web():
                         "decl": decl_degree,
                         "offset": info[46:56].lstrip().rstrip(),
                         "mag": info[57:65].lstrip().rstrip(),
-                        "url": url
+                        "url": url,
+                        "processingStartDate": None,
+                        "processingEndDate": None,
+                        "activationDate": None
                     }
             except Exception as e:
                 print(contents[i].attrs["name"] + " - " + str(e))

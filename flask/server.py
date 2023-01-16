@@ -69,24 +69,41 @@ def convert_supernovas():
     image_tag = 'spativis-converter'
     auto_remove = request.args.get('auto_remove') or ""
     auto_remove =  False if auto_remove.lower() == "false" else True
-    max_containers = int(request.args.get('max_containers') or 10); 
+    nb_containers = int(request.args.get('nb_containers') or 10); 
 
-    if (max_containers > 20):
-        return jsonify({'error': 'max_containers too hight'})
+    # build image if not exist
+    if (int(os.popen(f"docker images | grep {image_tag} | wc -l").read()) == 0):
+        os.popen(f"docker build /converter/ -t {image_tag}:latest")
+        return jsonify({'error': 'Image not build, start building it, retry later'})
 
-    nb_containers = int(os.popen(f"docker container ls -q -f ancestor={image_tag} | wc -l").read())
-    if (nb_containers > max_containers): 
-        return jsonify({'error': 'too much containers already running'})
+    if (nb_containers > 20):
+        return jsonify({'error': 'nb_containers too hight'})
 
-    os.system(f"docker build /converter/ -t {image_tag}:latest")
+    os.popen(f"docker rm $(docker container ls -aq -f ancestor={image_tag})")
+
     source_path = os.popen('docker inspect -f \'{{ range .Mounts }}{{ if eq .Destination "/data" }}{{ .Source }}{{ end }}{{ end }}\' $(docker container ls -q -f name=astronomy-backend)').read().strip()
 
-    for x in range(max_containers - nb_containers):
+    for x in range(nb_containers):
         os.system(f"docker run --detach --network=astronomy_default -v {source_path}:/data {image_tag}")
 
     containers = os.popen(f"docker container ls -q -f ancestor={image_tag}").read()
 
     return {'success': 'Docker stated', 'containers': containers.split("\n")[:-1]}
+
+
+@app.route('/api/active_sn', methods=['GET'])
+def active_supernovas():
+    # Check if the active script is running
+    process = os.popen('ps -ef | grep active.py | grep -v grep').read()
+    
+    if process:
+        pid = process.split()[0]
+        return jsonify({'error': 'process already running', 'pid': pid})
+                            
+    # Run the active script
+    output = os.system('python3 ./scripts/active.py &')
+    
+    return jsonify({'status': 'process started', 'output': output})
 
 
 ################################################

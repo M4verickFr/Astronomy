@@ -15,6 +15,9 @@ import skimage.exposure
 import operator
 import json
 
+import os
+from datetime import datetime
+
 # Setup MongoDB client
 client = MongoClient("mongo:27017")
 db = client.Spativis
@@ -27,12 +30,14 @@ except:
     exit()
 
 # Get supernova to convert
-sn = sn_collection.find_one({'name': '2015ay'})
-print(sn['url'])
+sn = sn_collection.find_one({'processingStartDate': None, 'processingEndDate': None, 'activationDate': None})
+print(sn['name'], sn['url'])
+sn_collection.update_one(sn, {"$set": { 'processingStartDate' : datetime.now() }}),
 
 # Download fits file of supernova
 image_file = download_file(sn['url'], cache=True)
-hdu = fits.open(image_file)[0]
+hdul = fits.open(image_file)
+hdu = hdul[0]
 wmap = WCS(hdu.header)
 data = hdu.data
 
@@ -60,7 +65,23 @@ data[mask1==0] = 0
 x,y,w,h = cv2.boundingRect(c)
 region = data[y-10:y+h+10, x-10:x+w+10]
 
+if not os.path.exists("/data/fits/"):
+    os.makedirs("/data/fits/")
+
 # Export fits
-hdu = fits.PrimaryHDU(region)
-hdul = fits.HDUList([hdu])
-hdul.writeto('/data/image.fits', overwrite=True)
+# hdu = fits.PrimaryHDU(region)
+# hdul = fits.HDUList([hdu])
+# hdul.writeto(f"/data/fits/{sn['name']}.fits", overwrite=True)
+
+# Export fits 2
+new_hdu = fits.PrimaryHDU(region, header=hdu.header)
+new_hdul = fits.HDUList([new_hdu])
+new_hdul.writeto(f"/data/fits/{sn['name']}.fits", overwrite=True)
+
+# Delete original fits file
+os.remove(image_file)
+
+# Update processing End Date
+sn_collection.update_one(sn, {"$set": { 'processingEndDate' : datetime.now() }})
+
+print()
