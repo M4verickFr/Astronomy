@@ -38,8 +38,8 @@ def parse_web():
                 
                 ra = info[31:38].lstrip().rstrip()
                 decl = info[39:45].lstrip().rstrip()
-
-                ra_degree = str(sum(float(x)/(60^idx) for idx, x in enumerate(ra.split())))
+                ra_split = ra.split()
+                ra_degree = str(float(ra_split[0]) + float(ra_split[1])/60)
                 decl_degree = str(float(decl.split()[0]) + sum(float(x)/(60^idx) for idx, x in enumerate(decl.split()[1:])))
 
                 if (ra != "" and decl != ""):
@@ -67,7 +67,6 @@ def parse_web():
 
 
 def create_database(table):
-    
     #print(table)
     sn_list = []
     for name, sn in table.items():

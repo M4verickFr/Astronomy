@@ -42,9 +42,8 @@ A.init.then(() => {
             const cat = A.catalog({ color: 'red', onClick: 'showTable' });
             var originalSources = [];
             for (let d of data){
-                console.log('coucou')
                 originalSources.push(
-                    A.source(d.ra, d.decl, { Name: d.name , Galaxy: d.galaxy}),
+                    A.marker(d.ra, d.decl, {popupTitle: d.name, popupDesc: d.galaxy}),
                 );
             }
             cat.addSources(originalSources);
