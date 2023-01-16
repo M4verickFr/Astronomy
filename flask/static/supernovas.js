@@ -10,7 +10,7 @@ $.ajax({
         for (let d of data){
             let tr = document.createElement("tr")
             tr.onclick = function(){
-                location.href="./viewer"
+                location.href="./viewer?ra=" + d.ra + "&decl=" + d.decl
             }
             let name = document.createElement("td")
             name.innerHTML = d.name
