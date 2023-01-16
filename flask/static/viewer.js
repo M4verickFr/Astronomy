@@ -32,14 +32,24 @@ A.init.then(() => {
     // var hips = A.catalogHiPS('http://localhost:8000/DataHiPS', {onClick: 'showTable', name: 'Catalog'});
     // aladin.addCatalog(hips);
     
-    const cat = A.catalog({ color: 'red', onClick: 'showTable' });
-    const originalSources = [
-        A.source(204.971666667, -31.67083333, { name: 'S1' }),
-        A.source(56.1, -44.66, { name: 'S2' }),
-    ];
     
-    cat.addSources(originalSources);
+    $.ajax({
+        url: "/api/sn",
+        type: "GET",
+        dataType: "json",
+        success: data => {
+            const cat = A.catalog({ color: 'red', onClick: 'showTable' });
+            var originalSources = [];
+            for (let d of data){
+                console.log('coucou')
+                originalSources.push(
+                    A.source(d.ra, d.decl, { Name: d.name , Galaxy: d.galaxy}),
+                );
+            }
+            cat.addSources(originalSources);
+            aladin.addCatalog(cat);
+        }
+    })
     
-    aladin.addCatalog(cat);
 
 });
