@@ -123,8 +123,12 @@ def active_supernovas():
 ################################################
 
 @app.route('/api/sn', methods=['GET'])
-def list_supernovas(): # TODO
-    sn = sn_collection.find({},{"_id":0})
+def list_supernovas():
+
+    filterData = {"activationDate": {"$ne": None}} if request.args.get('active') else {}
+
+
+    sn = sn_collection.find(filterData,{"_id":0})
 
     if not sn:
         return jsonify({'error': 'data not found'})
@@ -134,7 +138,7 @@ def list_supernovas(): # TODO
     return jsonify(t_sn)
 
 @app.route('/api/sn', methods=['PUT'])
-def create_record(): # TODO
+def create_record():
     record = json.loads(request.data)
     sn = sn_collection.find_one(record)
     if sn:
@@ -144,7 +148,7 @@ def create_record(): # TODO
     return jsonify({'_id': str(sn.inserted_id)})
 
 @app.route('/api/sn', methods=['POST'])
-def update_record(): # TODO
+def update_record():
     record = json.loads(request.data)
     sn = sn_collection.find_one(record)
     if not sn:
@@ -154,7 +158,7 @@ def update_record(): # TODO
     return jsonify({'_id': str(sn.inserted_id)})
 
 @app.route('/api/sn', methods=['DELETE'])
-def delete_record(): # TODO
+def delete_record():
     record = json.loads(request.data)
     supernova = Supernova.objects(name=record['name']).first()
     if not supernova:
@@ -164,7 +168,7 @@ def delete_record(): # TODO
     return jsonify(supernova.to_json())
 
 @app.route('/api/sn/<id>', methods=['GET'])
-def query_record(id): # TODO
+def query_record(id):
     supernova = Supernova.objects(name=id).first()
     if not supernova:
         return jsonify({'error': 'data not found'})

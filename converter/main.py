@@ -16,6 +16,7 @@ import operator
 import json
 
 import os
+from pyavm import AVM
 from datetime import datetime
 
 # Setup MongoDB client
@@ -29,59 +30,52 @@ except:
     print("Server not available")
     exit()
 
-# Get supernova to convert
-sn = sn_collection.find_one({'processingStartDate': None, 'processingEndDate': None, 'activationDate': None})
-print(sn['name'], sn['url'])
-sn_collection.update_one(sn, {"$set": { 'processingStartDate' : datetime.now() }}),
+while True:
+    # Get supernova to convert
+    sn = sn_collection.find_one({'processingStartDate': None, 'processingEndDate': None, 'activationDate': None})
+    if (not sn): break
 
-# Download fits file of supernova
-image_file = download_file(sn['url'], cache=True)
-hdul = fits.open(image_file)
-hdu = hdul[0]
-wmap = WCS(hdu.header)
-data = hdu.data
+    print(sn['name'], sn['url'])
+    sn_collection.update_one(sn, {"$set": { 'processingStartDate' : datetime.now() }}),
 
-img = np.array(data/255, dtype = np.uint8) #Converting float32 to uint8
+    # Download fits file of supernova
+    image_file = download_file(sn['url'], cache=True)
+    hdul = fits.open(image_file)
+    hdu = hdul[0]
+    wmap = WCS(hdu.header)
+    data = hdu.data
 
-# Apply adaptive threshold with gaussian size 51x51
-thresh_gray = cv2.adaptiveThreshold(img, 255, adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C, thresholdType=cv2.THRESH_BINARY, blockSize=255, C=0)
+    img = np.array(data/255, dtype = np.uint8) #Converting float32 to uint8
 
-# Find contours, and get the contour with maximum area
-cnts = cv2.findContours(thresh_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-cnts = imutils.grab_contours(cnts)
+    # Apply adaptive threshold with gaussian size 51x51
+    thresh_gray = cv2.adaptiveThreshold(img, 255, adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C, thresholdType=cv2.THRESH_BINARY, blockSize=255, C=0)
 
-c = max(cnts, key=cv2.contourArea)
+    # Find contours, and get the contour with maximum area
+    cnts = cv2.findContours(thresh_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    cnts = imutils.grab_contours(cnts)
 
-# Draw contours with maximum size on new mask
-ellipse = cv2.fitEllipse(c)
-mask1 = np.zeros_like(thresh_gray)
-mask1=cv2.ellipse(mask1, ellipse, (255,255,255),-1)
+    c = max(cnts, key=cv2.contourArea)
 
-# apply mask
-data[mask1==0] = 0
-# data[mask1<1] = 0
+    # Draw contours with maximum size on new mask
+    ellipse = cv2.fitEllipse(c)
+    mask1 = np.zeros_like(thresh_gray)
+    mask1=cv2.ellipse(mask1, ellipse, (255,255,255),-1)
 
-# Extract region
-x,y,w,h = cv2.boundingRect(c)
-region = data[y-10:y+h+10, x-10:x+w+10]
+    # apply mask
+    data[mask1==0] = 0
 
-if not os.path.exists("/data/fits/"):
-    os.makedirs("/data/fits/")
+    # Create export folder if not exist
+    if not os.path.exists("/data/images/"):
+        os.makedirs("/data/images/")
 
-# Export fits
-# hdu = fits.PrimaryHDU(region)
-# hdul = fits.HDUList([hdu])
-# hdul.writeto(f"/data/fits/{sn['name']}.fits", overwrite=True)
+    # Export fits
+    new_hdu = fits.PrimaryHDU(data, header=hdu.header)
+    new_hdul = fits.HDUList([new_hdu])
+    new_hdul.writeto(f"/data/images/{sn['name']}.fits", overwrite=True)
 
-# Export fits 2
-new_hdu = fits.PrimaryHDU(region, header=hdu.header)
-new_hdul = fits.HDUList([new_hdu])
-new_hdul.writeto(f"/data/fits/{sn['name']}.fits", overwrite=True)
+    # Delete original fits file
+    os.remove(image_file)
 
-# Delete original fits file
-os.remove(image_file)
-
-# Update processing End Date
-sn_collection.update_one(sn, {"$set": { 'processingEndDate' : datetime.now() }})
-
-print()
+    # Update processing End Date
+    sn = sn_collection.find_one({'name': sn['name']})
+    sn_collection.update_one(sn, {"$set": { 'processingEndDate' : datetime.now() }})

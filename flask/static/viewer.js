@@ -1,3 +1,5 @@
+let aladin;
+
 A.init.then(() => {
     let url = new URL(location.href)
     let ra = url.searchParams.get("ra")
@@ -10,7 +12,7 @@ A.init.then(() => {
         fov = 1
     }
 
-    const aladin = A.aladin('#aladin-lite-div', { 
+    aladin = A.aladin('#aladin-lite-div', { 
         cooFrame: 'galactic', 
         target: target, 
         showSimbadPointerControl: true, 
@@ -26,8 +28,9 @@ A.init.then(() => {
     aladin.setBaseImageLayer('P/DSS2/color');
     
     // Add a HiPS layer
-    // aladin.setOverlayImageLayer(aladin.createImageSurvey("Data", "Data", "data/DataHiPS", "equatorial", 9, { imgFormat: "png" }));
-    // aladin.getOverlayImageLayer().setAlpha(1.0);
+    aladin.setOverlayImageLayer(aladin.createImageSurvey("Data", "Data", "http://localhost:81/data/hips/UNK.AUTH_P_HiPSID", "equatorial", 9, { imgFormat: "png" }));
+    // aladin.setOverlayImageLayer(aladin.createImageSurvey('VTSS', 'VTSS', 'https://alasky.u-strasbg.fr/VTSS/Ha', 'galactic', 3, {imgFormat: 'png'}));
+    aladin.getOverlayImageLayer().setAlpha(1.0);
     
     // Add a catalog
     // var hips = A.catalogHiPS('http://localhost:8000/DataHiPS', {onClick: 'showTable', name: 'Catalog'});
@@ -35,7 +38,7 @@ A.init.then(() => {
     
     
     $.ajax({
-        url: "/api/sn",
+        url: "/api/sn?active=true",
         type: "GET",
         dataType: "json",
         success: data => {

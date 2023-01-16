@@ -4,3 +4,4 @@ matplotlib
 astropy
 opencv-python
 scikit-image
+PyAVM
