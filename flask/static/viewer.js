@@ -2,23 +2,24 @@ A.init.then(() => {
     let url = new URL(location.href)
     let ra = url.searchParams.get("ra")
     let decl = url.searchParams.get("decl")
+
     let target = 'galactic center'
+    let fov = 360
     if(ra && decl){
         target = ra + " " + decl
+        fov = 1
     }
 
     const aladin = A.aladin('#aladin-lite-div', { 
         cooFrame: 'galactic', 
-        fov: 110, 
         target: target, 
         showSimbadPointerControl: true, 
-        fov: 360, 
+        fov: fov, 
         projection: "AIT", 
         cooFrame: 'equatorial', 
         showCooGridControl: true, 
         showSimbadPointerControl: true, 
-        showCooGrid: true,
-        coordonne: ra
+        showCooGrid: true
     });
 
     // Set the base image layer to DSS2 colored
