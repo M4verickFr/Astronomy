@@ -10,7 +10,7 @@ $.ajax({
         for (let d of data){
             let tr = document.createElement("tr")
             tr.onclick = function(){
-                location.href="./viewer?ra=" + d.ra + "&decl=" + d.decl
+                location.href="./viewer?ra=" + d.ra_degree + "&decl=" + d.decl_degree
             }
             let name = document.createElement("td")
             name.innerHTML = d.name
@@ -38,10 +38,42 @@ $.ajax({
             document.getElementById("table-supernovae").getElementsByTagName("tbody")[0].append(tr)
 
             //$("#table-supernovae").DataTable()
-
-            $("#table-supernovae").removeClass("hidden")
-            $("#loading").removeClass("hidden").addClass("hidden")
-
         }
+        
+        if(Object.values(data).length){
+            $("#table-supernovae").removeClass("hidden")
+        }
+        
+        $("#btn-extract-supernova").removeClass("hidden")
+        
+
+        $("#loading").removeClass("hidden").addClass("hidden")
     },
 })
+
+
+function extractSupernova(){
+    $.ajax({
+        url: "/api/extract_sn/start",
+        type: "GET",
+        dataType: "json",
+        success: data => {
+            setInterval(reloadSupernovas, 1000)
+        },
+    });
+    Notify("info", "L'extraction de nouvelles supernovas est en cours")
+}
+
+function reloadSupernovas(){
+    $.ajax({
+        url: "/api/extract_sn/progress",
+        type: "GET",
+        dataType: "json",
+        success: data => {
+            if(data["status"]=="ended"){
+                location.href = "/supernovas?new=true"
+            }
+        },
+    });
+    
+}

@@ -1,16 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css">
+    
+    <script src="{{ url_for('static', filename='supernovas.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mouse0270-bootstrap-notify/3.1.5/bootstrap-notify.min.js"></script>
+    <script src="{{ url_for('static', filename='popup.js') }}"></script>
+
+    {% if new %}
+        <script>Notify("success", "L'extraction est terminée")</script>
+    {% endif %}
     <div class="presentation w-100">
         <h1>Supernovas</h1>
         <p>Here are the supernovas that have been discovered by the LSST.</p>
+        
+        <!-- Boutons -->
+        <button type="button" class="btn btn-dark" id="btn btn-extract-supernova" onclick="extractSupernova()">
+          Extraire de nouvelles supernovas
+        </button>
+
+        <button type="button" class="btn btn-dark" id="btn btn-detect-supernova" onclick="detectSupernova()">
+          Détecter les supernovas (100 supernovas)
+        </button>
+
+        <button type="button" class="btn btn-dark" id="btn btn-place-supernova" onclick="placeSupernova()">
+          Positionner les supernovas
+        </button>
         
         <!-- Loading -->
         <div id="loading" class="loading mt-5">
             <div class="spinner-border text-primary" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
-        </div> 
+        </div>
+
         <!-- Tableau data supernovas -->
         <table id="table-supernovae" class="table table-dark table-hover hidden">
             <thead>
@@ -29,11 +57,6 @@
           </table>
         
     </div>
-
     
-    <script src="{{ url_for('static', filename='supernovas.js') }}"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-
-
+  
 {% endblock %}

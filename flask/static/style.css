@@ -135,3 +135,7 @@ body {
  .hidden {
     display: none;
  }
+
+ .btn {
+    margin: 20px;
+ }

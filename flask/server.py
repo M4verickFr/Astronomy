@@ -29,7 +29,8 @@ def viewer():
 
 @app.route('/supernovas')
 def supernovas():
-    return render_template('supernovas.html')
+    new = request.args.get('new')
+    return render_template('supernovas.html', new=new)
 
 @app.route('/data/<path:filename>')
 def data(filename):
@@ -49,7 +50,7 @@ def resource_not_found(e):
 ################################################
 #####                API                   #####
 ################################################
-@app.route('/api/extract_sn', methods=['GET'])
+@app.route('/api/extract_sn/start', methods=['GET'])
 def extract_new_supernova():
     # Check if the extract script is running
     process = os.popen('ps -ef | grep extract.py | grep -v grep').read()
@@ -62,6 +63,17 @@ def extract_new_supernova():
     output = os.system('python3 ./scripts/extract.py &')
     
     return jsonify({'status': 'process started', 'output': output})
+
+@app.route('/api/extract_sn/progress', methods=['GET'])
+def extract_new_supernova_progress():
+    # Check if the extract script is running
+    process = os.popen('ps -ef | grep extract.py | grep -v grep').read()
+    
+    if process:
+        pid = process.split()[0]
+        return jsonify({'status': 'started', 'pid': pid})
+
+    return jsonify({'status': 'ended'})
     
 
 @app.route('/api/convert_sn', methods=['GET'])

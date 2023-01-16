@@ -31,12 +31,14 @@ def parse_web():
             try:
                 name = contents[i].attrs["name"]
                 info = contents[i+1]
-                if(name == "2015bh"):
-                    print(True)
-                if(name == lastName):
-                    print(name)
-                    break
                 
+                try:
+                    if(name == lastName["name"]):
+                        print(name)
+                        break
+                except:
+                    ""
+
                 ra = info[31:38].lstrip().rstrip()
                 decl = info[39:45].lstrip().rstrip()
                 ra_split = ra.split()
@@ -60,8 +62,10 @@ def parse_web():
                         "name": name,
                         "galaxy": info[2:17].lstrip().rstrip(),
                         "date": info[19:29].lstrip().rstrip(),
-                        "ra": ra_degree,
-                        "decl": decl_degree,
+                        "ra": ra,
+                        "decl": decl,
+                        "ra_degree": ra_degree,
+                        "decl_degree": decl_degree,
                         "offset": info[46:56].lstrip().rstrip(),
                         "mag": info[57:65].lstrip().rstrip(),
                         "url": url,
@@ -89,7 +93,6 @@ def export_json(table):
     with open('src/Astronomy/data/table.json', 'w') as fp:
         json.dump(table, fp, indent=4)
 
-
 client = MongoClient("mongo:27017")
 db = client.Spativis
 sn_collection = db["supernovas"]
@@ -101,7 +104,7 @@ try:
     lastName = sorted(list_ex, key=lambda d: d['name'], reverse=True)[0]
 except:
     ""
-print(lastName)
+
 
 create_database(parse_web())
     
