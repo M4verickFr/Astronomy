@@ -14,6 +14,8 @@ import requests
 import json
 from bs4 import BeautifulSoup
 
+import math
+
 
 
 
@@ -39,8 +41,14 @@ def parse_web():
                 ra = info[31:38].lstrip().rstrip()
                 decl = info[39:45].lstrip().rstrip()
                 ra_split = ra.split()
-                ra_degree = str(float(ra_split[0]) + float(ra_split[1])/60)
-                decl_degree = str(float(decl.split()[0]) + sum(float(x)/(60^idx) for idx, x in enumerate(decl.split()[1:])))
+                ra_degree = str(float(ra_split[0])*15 + float(ra_split[1])*15/60)
+                
+
+                decl_split = decl.split()
+                if(decl_split[0][0] == "-"):
+                    decl_degree = str(float(decl_split[0]) - float(decl_split[1])/60)
+                else:
+                    decl_degree = str(float(decl_split[0]) + float(decl_split[1])/60)
 
                 if (ra != "" and decl != ""):
                     ra_list = ra.split()
