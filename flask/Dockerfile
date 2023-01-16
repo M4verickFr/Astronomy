@@ -1,12 +1,10 @@
 # syntax=docker/dockerfile:1.4
 FROM --platform=$BUILDPLATFORM python:3.10-alpine AS builder
 
-
-
 RUN <<EOF
-apk update
-apk add docker
-apk add openjdk11
+    apk update
+    apk add docker
+    apk add openjdk11
 EOF
 
 WORKDIR /src
