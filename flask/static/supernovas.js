@@ -9,8 +9,11 @@ $.ajax({
         //console.log(data)
         for (let d of data){
             let tr = document.createElement("tr")
-            tr.onclick = function(){
-                location.href="./viewer?ra=" + d.ra_degree + "&decl=" + d.decl_degree
+            tr.onclick = function(e){
+                if(!e.target.classList.contains("icon-redirect") &&  !e.target.classList.contains("blue-icon")){
+                    location.href="./viewer?ra=" + d.ra_degree + "&decl=" + d.decl_degree
+                }
+                
             }
             let status = document.createElement("td")
             let point = document.createElement("span")
@@ -39,6 +42,15 @@ $.ajax({
             offset.innerHTML = d.offset
             let mag = document.createElement("td")
             mag.innerHTML = d.mag
+            let source = document.createElement("td")
+            let a = document.createElement("a")
+            a.href = d.url + "&format=gif"
+            a.target="_blank";
+            let i = document.createElement("i")
+            i.classList.add("fa-regular", "fa-image", "blue-icon")
+            a.append(i)
+            source.append(a)
+            source.classList.add("icon-redirect")
 
             tr.append(status)
             tr.append(name)
@@ -48,6 +60,7 @@ $.ajax({
             tr.append(decl)
             tr.append(offset)
             tr.append(mag)
+            tr.append(source)
 
             document.getElementById("table-supernovae").getElementsByTagName("tbody")[0].append(tr)
 

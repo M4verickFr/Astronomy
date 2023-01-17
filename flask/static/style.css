@@ -158,3 +158,8 @@ tr:hover{
 .bg-red{
     background-color:red;
 }
+
+.blue-icon:hover{
+    cursor: pointer;
+    color:cornflowerblue;
+}
