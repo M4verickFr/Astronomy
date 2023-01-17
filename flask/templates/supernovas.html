@@ -13,22 +13,25 @@
     <script src="{{ url_for('static', filename='popup.js') }}"></script>
 
     {% if new %}
-        <script>Notify("success", "L'extraction est terminée")</script>
+        <script>
+          Notify("success", "L'extraction est terminée");
+          history.pushState(null, null, `${location.origin}${location.pathname}`);
+        </script>
     {% endif %}
     <div class="presentation w-100">
         <h1>Supernovas</h1>
         <p>Here are the supernovas that have been discovered by the LSST.</p>
         
         <!-- Boutons -->
-        <button type="button" class="btn btn-dark" id="btn btn-extract-supernova" onclick="extractSupernova()">
+        <button type="button" class="btn btn-dark" id="btn btn-extract-supernova" onclick="extractSupernovas()">
           Extraire de nouvelles supernovas
         </button>
 
-        <button type="button" class="btn btn-dark" id="btn btn-detect-supernova" onclick="detectSupernova()">
-          Détecter les supernovas (100 supernovas)
+        <button type="button" class="btn btn-dark" id="btn btn-detect-supernova" onclick="detectSupernovas()">
+          Détecter les supernovas
         </button>
 
-        <button type="button" class="btn btn-dark" id="btn btn-place-supernova" onclick="placeSupernova()">
+        <button type="button" class="btn btn-dark" id="btn btn-place-supernova" onclick="placeSupernovas()">
           Positionner les supernovas
         </button>
         

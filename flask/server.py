@@ -86,10 +86,16 @@ def convert_supernovas():
     # build image if not exist
     if (int(os.popen(f"docker images | grep {image_tag} | wc -l").read()) == 0):
         os.popen(f"docker build /converter/ -t {image_tag}:latest")
-        return jsonify({'error': 'Image not build, start building it, retry later'})
+        return jsonify({
+            'type': 'info',
+            'message': 'Image not build, start building it, retry later'
+        })
 
     if (nb_containers > 20):
-        return jsonify({'error': 'nb_containers too hight'})
+        return jsonify({
+            'type': 'error',
+            'message': 'nb_containers too hight'
+        })
 
     os.popen(f"docker rm $(docker container ls -aq -f ancestor={image_tag})")
 
@@ -100,7 +106,11 @@ def convert_supernovas():
 
     containers = os.popen(f"docker container ls -q -f ancestor={image_tag}").read()
 
-    return {'success': 'Docker stated', 'containers': containers.split("\n")[:-1]}
+    return jsonify({
+        'type': 'success',
+        'message': 'Docker started',
+        'containers': containers.split("\n")[:-1]
+    })
 
 
 @app.route('/api/active_sn', methods=['GET'])
@@ -110,12 +120,26 @@ def active_supernovas():
     
     if process:
         pid = process.split()[0]
-        return jsonify({'error': 'process already running', 'pid': pid})
+        return jsonify({
+            'type': 'error',
+            'message': 'process already running',
+            'pid': pid
+        })
                             
     # Run the active script
     output = os.system('python3 ./scripts/active.py &')
     
-    return jsonify({'status': 'process started', 'output': output})
+    return jsonify({
+        'type': 'info',
+        'message': 'process started',
+        'output': output
+    })
+
+@app.route('/api/reset', methods=['GET'])
+def reset():
+    output = os.popen('rm -rf /data/*').read()
+    sn_collection.delete_many({})
+    return jsonify({'status': 'All data reseted', 'output': output})
 
 
 ################################################
