@@ -12,6 +12,19 @@ $.ajax({
             tr.onclick = function(){
                 location.href="./viewer?ra=" + d.ra_degree + "&decl=" + d.decl_degree
             }
+            let status = document.createElement("td")
+            let point = document.createElement("span")
+            point.classList.add("dot")
+            status.append(point)
+
+            if(d.activationDate){
+                point.classList.add("bg-green")
+            } else if(d.processingStartDate){
+                point.classList.add("bg-orange")
+            } else {
+                point.classList.add("bg-red")
+            } 
+            
             let name = document.createElement("td")
             name.innerHTML = d.name
             let galaxy = document.createElement("td")
@@ -27,6 +40,7 @@ $.ajax({
             let mag = document.createElement("td")
             mag.innerHTML = d.mag
 
+            tr.append(status)
             tr.append(name)
             tr.append(galaxy)
             tr.append(date)

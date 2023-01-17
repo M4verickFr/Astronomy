@@ -27,10 +27,13 @@ A.init.then(() => {
     // Set the base image layer to DSS2 colored
     aladin.setBaseImageLayer('P/DSS2/color');
     
+
     // Add a HiPS layer
     aladin.setOverlayImageLayer(aladin.createImageSurvey("Data", "Data", "http://localhost:81/data/hips/UNK.AUTH_P_HiPSID", "equatorial", 9, { imgFormat: "png" }));
     // aladin.setOverlayImageLayer(aladin.createImageSurvey('VTSS', 'VTSS', 'https://alasky.u-strasbg.fr/VTSS/Ha', 'galactic', 3, {imgFormat: 'png'}));
-    aladin.getOverlayImageLayer().setAlpha(1.0);
+    aladin.getOverlayImageLayer().setOptions({"stretch":"pow2", "colormap":"cubehelix", "opacity":1, "maxCut":1, "additive":true});
+    
+    aladin.setBackgroundColor("rgb(0,0,0)");
     
     // Add a catalog
     // var hips = A.catalogHiPS('http://localhost:8000/DataHiPS', {onClick: 'showTable', name: 'Catalog'});

@@ -56,7 +56,7 @@ def parse_web():
                     decl_list = decl.split()
                     ra_new_list = f"{ra_list[0]}+{ra_list[1]}"
                     decl_new_list = f"{decl_list[0]}+{decl_list[1]}"
-                    url = f'https://archive.stsci.edu/cgi-bin/dss_search?v=3&r={ra_new_list}&d={decl_new_list}&h=3&w=3'
+                    url = f'https://archive.stsci.edu/cgi-bin/dss_search?v=3&r={ra_new_list}&d={decl_new_list}&h=4&w=4'
 
                     table[name] = {
                         "name": name,
