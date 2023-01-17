@@ -94,12 +94,12 @@ def convert_supernovas():
     if (nb_containers > 20):
         return jsonify({
             'type': 'error',
-            'message': 'nb_containers too hight'
+            'message': 'nb_containers too high'
         })
 
     os.popen(f"docker rm $(docker container ls -aq -f ancestor={image_tag})")
 
-    source_path = os.popen('docker inspect -f \'{{ range .Mounts }}{{ if eq .Destination "/data" }}{{ .Source }}{{ end }}{{ end }}\' $(docker container ls -q -f name=astronomy-backend)').read().strip()
+    source_path = os.popen('docker inspect  $(docker container ls -q -f name=astronomy-backend) -f \'{{ range .Mounts }}{{ if eq .Destination "/data" }}{{ .Source }}{{ end }}{{ end }}\'').read().strip()
 
     for x in range(nb_containers):
         os.system(f"docker run --detach --network=astronomy_default -v {source_path}:/data {image_tag}")

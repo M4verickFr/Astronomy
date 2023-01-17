@@ -2,7 +2,7 @@
 
 // TODO - make ajax request to api to load all supernovas in database
 $.ajax({
-    url: "/api/sn?active=true",
+    url: "/api/sn",
     type: "GET",
     dataType: "json",
     success: data => {
