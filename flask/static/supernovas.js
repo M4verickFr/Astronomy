@@ -51,8 +51,7 @@ $.ajax({
     },
 })
 
-
-function extractSupernova(){
+function extractSupernovas(){
     $.ajax({
         url: "/api/extract_sn/start",
         type: "GET",
@@ -75,5 +74,26 @@ function reloadSupernovas(){
             }
         },
     });
-    
+}
+
+function detectSupernovas(){
+    $.ajax({
+        url: "/api/convert_sn?nb_containers=10",
+        type: "GET",
+        dataType: "json",
+        success: data => {
+            Notify(data.type, data.message)
+        },
+    });
+}
+
+function placeSupernovas(){
+    $.ajax({
+        url: "/api/active_sn",
+        type: "GET",
+        dataType: "json",
+        success: data => {
+            Notify(data.type, data.message)
+        },
+    });
 }
