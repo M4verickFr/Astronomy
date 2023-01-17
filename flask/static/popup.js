@@ -23,7 +23,7 @@ function Notify(type, message, delay = 3000) {
             title = "<strong>Danger</strong>"
             break
         default:
-            icon = "glyphicon glyphicon-ok"
+            icon = "glyphicon glyphicon-warning-sign"
             title = "<strong>Default</strong>"
             break
     };
