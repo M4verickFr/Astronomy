@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', event => {
 document.addEventListener('DOMContentLoaded', event => {
     let params = new URLSearchParams(location.href.split("?").at(-1));
     let previousNotify = params.get('notify');
+    params.delete('notify')
 
     let messages = {
         'supernovas_extracted': {
@@ -107,8 +108,8 @@ document.addEventListener('DOMContentLoaded', event => {
     if (previousNotify && messages[previousNotify]) {
         let {type, message} = messages[previousNotify]
         Notify(type, message);
+        
+        history.pushState(null, null, `${location.origin}${location.pathname}?${params.toString()}`);
     }
-
-    history.pushState(null, null, `${location.origin}${location.pathname}`);
 })
 

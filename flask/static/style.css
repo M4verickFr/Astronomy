@@ -130,6 +130,10 @@ body > * {
     width: 90vw;
 }
 
+.aladin-popup {
+    color: black;
+}
+
 /*
  * Supernova
  */
