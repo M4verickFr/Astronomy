@@ -32,8 +32,6 @@ html, body {
 
 body {
     min-height: 100vh;
-    background-color: #333;
-
     display: -ms-flexbox;
     display: -webkit-box;
     display: flex;
@@ -42,7 +40,20 @@ body {
     justify-content: center;
     color: #fff;
     text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+}
+
+body > * {
+    z-index: 2;
+}
+
+.border-shadow {
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: #333;
     box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
 }
 
 /*
@@ -162,4 +173,46 @@ tr:hover{
 .blue-icon:hover{
     cursor: pointer;
     color:cornflowerblue;
+}
+
+.popper {
+    background-color: white;
+    color: rgb(51, 51, 51);
+    padding: 4px 8px;
+    font-size: 13px;
+    border-radius: 4px;
+}
+
+.popper > .arrow,
+.popper > .arrow::before {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+}
+
+.popper > .arrow {
+    visibility: hidden;
+}
+
+.popper > .arrow::before {
+    visibility: visible;
+    content: '';
+    transform: rotate(45deg);
+}
+
+.popper[data-popper-placement^='top'] > .arrow {
+    bottom: -4px;
+}
+
+.popper[data-popper-placement^='bottom'] > .arrow {
+    top: -4px;
+}
+
+.popper[data-popper-placement^='left'] > .arrow {
+    right: -4px;
+}
+
+.popper[data-popper-placement^='right'] > .arrow {
+    left: -4px;
 }

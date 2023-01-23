@@ -39,7 +39,6 @@ A.init.then(() => {
     // var hips = A.catalogHiPS('http://localhost:8000/DataHiPS', {onClick: 'showTable', name: 'Catalog'});
     // aladin.addCatalog(hips);
     
-    
     $.ajax({
         url: "/api/sn?active=true",
         type: "GET",
@@ -56,6 +55,5 @@ A.init.then(() => {
             aladin.addCatalog(cat);
         }
     })
-    
 
 });

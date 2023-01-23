@@ -16,9 +16,9 @@ if not os.path.exists(source_folder):
 if not os.path.exists(destination_folder):
     os.makedirs(destination_folder)
 
-while  len(os.listdir(source_folder)) > 0:
+while len(os.listdir(source_folder)) > 0:
     file_count = 0
-    for filename in os.listdir(source_folder):
+    for filename in os.listdir(source_folder)[::-1]:
         if file_count >= 10:
             break
         source = os.path.join(source_folder, filename)
