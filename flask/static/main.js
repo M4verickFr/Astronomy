@@ -92,3 +92,23 @@ document.addEventListener('DOMContentLoaded', event => {
     
 });
 
+// Displaying a previous notification 
+document.addEventListener('DOMContentLoaded', event => {
+    let params = new URLSearchParams(location.href.split("?").at(-1));
+    let previousNotify = params.get('notify');
+
+    let messages = {
+        'supernovas_extracted': {
+            'type': 'success',
+            'message': 'Extraction of supernovas completed'
+        }
+    };
+
+    if (previousNotify && messages[previousNotify]) {
+        let {type, message} = messages[previousNotify]
+        Notify(type, message);
+    }
+
+    history.pushState(null, null, `${location.origin}${location.pathname}`);
+})
+

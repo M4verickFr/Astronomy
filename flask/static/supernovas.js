@@ -1,6 +1,4 @@
 // Make ajax request to api to load all supernova in database and create a boostrap table
-
-// TODO - make ajax request to api to load all supernovas in database
 $.ajax({
     url: "/api/sn",
     type: "GET",
@@ -63,8 +61,6 @@ $.ajax({
             tr.append(source)
 
             document.getElementById("table-supernovae").getElementsByTagName("tbody")[0].append(tr)
-
-            //$("#table-supernovae").DataTable()
         }
         
         if(Object.values(data).length){
@@ -78,38 +74,61 @@ $.ajax({
     },
 })
 
+/**
+ * Extraction of supernovas
+ */
 function extractSupernovas(){
     $.ajax({
         url: "/api/extract_sn/start",
         type: "GET",
         dataType: "json",
         success: data => {
-            setInterval(reloadSupernovas, 1000)
-        },
-    });
-    Notify("info", "L'extraction de nouvelles supernovas est en cours")
-}
-
-function reloadSupernovas(){
-    $.ajax({
-        url: "/api/extract_sn/progress",
-        type: "GET",
-        dataType: "json",
-        success: data => {
-            if(data["status"]=="ended"){
-                location.href = "/supernovas?new=true"
+            Notify(data.type, data.message);
+            if (data.type === 'info') {
+                let interval = setInterval(() => {
+                    $.ajax({
+                        url: "/api/extract_sn/pid",
+                        type: "GET",
+                        dataType: "json",
+                        success: data => {
+                            if(typeof data["pid"] === 'undefined'){
+                                clearInterval(interval);
+                                location.href = "/supernovas?notify=supernovas_extracted"
+                            }
+                        },
+                    });
+                }, 1000);
             }
         },
     });
 }
 
+/**
+ * Detect supernovas in images
+ */
 function detectSupernovas(){
     $.ajax({
-        url: "/api/convert_sn?nb_containers=10",
+        url: "/api/convert_sn/start?nb_containers=10",
         type: "GET",
         dataType: "json",
         success: data => {
             Notify(data.type, data.message)
+            if (data.status === 'startImageBuilding') {
+                let interval = setInterval(() => {
+                    $.ajax({
+                        url: "/api/convert_sn/pid",
+                        type: "GET",
+                        dataType: "json",
+                        success: data => {
+                            if(typeof data["pid"] === 'undefined'){
+                                clearInterval(interval);
+                                Notify("info", "The image has been built, start detection")
+                                detectSupernovas()
+                            }
+                        },
+                    });
+                }, 1000);
+            }
         },
     });
 }

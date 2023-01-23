@@ -29,8 +29,7 @@ def viewer():
 
 @app.route('/supernovas')
 def supernovas():
-    new = request.args.get('new')
-    return render_template('supernovas.html', new=new)
+    return render_template('supernovas.html')
 
 @app.route('/data/<path:filename>')
 def data(filename):
@@ -57,61 +56,109 @@ def extract_new_supernova():
     
     if process:
         pid = process.split()[0]
-        return jsonify({'error': 'process already running', 'pid': pid})
-                            
-    # Run the extract script
-    output = os.system('python3 ./scripts/extract.py &')
-    
-    return jsonify({'status': 'process started', 'output': output})
+        return jsonify({
+            'type': 'error',
+            'message': 'Extraction already in progress',
+            'pid': pid
+        })
 
-@app.route('/api/extract_sn/progress', methods=['GET'])
+    # Run the extract script
+    os.system('python3 ./scripts/extract.py &')
+    
+    return jsonify({
+        'type': 'info',
+        'message': 'Supernova extraction started'
+    })
+
+@app.route('/api/extract_sn/pid', methods=['GET'])
 def extract_new_supernova_progress():
     # Check if the extract script is running
     process = os.popen('ps -ef | grep extract.py | grep -v grep').read()
     
     if process:
         pid = process.split()[0]
-        return jsonify({'status': 'started', 'pid': pid})
+        return jsonify({
+            'type': 'info',
+            'message': 'Extraction in progress',
+            'pid': pid
+        })
 
-    return jsonify({'status': 'ended'})
-    
+    return jsonify({
+            'type': 'warning',
+            'message': 'No extraction in progress'
+        })
 
-@app.route('/api/convert_sn', methods=['GET'])
+@app.route('/api/convert_sn/start', methods=['GET'])
 def convert_supernovas():
     image_tag = 'spativis-converter'
     auto_remove = request.args.get('auto_remove') or ""
     auto_remove =  False if auto_remove.lower() == "false" else True
-    nb_containers = int(request.args.get('nb_containers') or 10); 
+    nb_containers = int(request.args.get('nb_containers') or 10);
 
-    # build image if not exist
-    if (int(os.popen(f"docker images | grep {image_tag} | wc -l").read()) == 0):
-        os.popen(f"docker build /converter/ -t {image_tag}:latest")
+    # Check if the image building script is running
+    process = os.popen('ps -ef | grep build.py | grep -v grep').read()
+    
+    if process:
+        pid = process.split()[0]
         return jsonify({
             'type': 'info',
-            'message': 'Image not build, start building it, retry later'
+            'message': 'Image building in progress',
+            'pid': pid
         })
 
+    # Check if build image exist, if not exist, start building it
+    if (int(os.popen(f"docker images | grep {image_tag} | wc -l").read()) == 0):
+        # Run the image building script
+        os.system('python3 ./scripts/build.py &')
+        
+        return jsonify({
+            'type': 'info',
+            'message': 'Image not build, start building it',
+            'status': 'startImageBuilding'
+        })
+
+    os.popen(f"docker rm $(docker container ls -aq -f ancestor={image_tag})")
+
+    # Prevent start too many containers
     if (nb_containers > 20):
         return jsonify({
             'type': 'error',
             'message': 'nb_containers too high'
         })
 
-    os.popen(f"docker rm $(docker container ls -aq -f ancestor={image_tag})")
-
+    # Extract path to data folder
     source_path = os.popen('docker inspect  $(docker container ls -q -f name=astronomy-backend) -f \'{{ range .Mounts }}{{ if eq .Destination "/data" }}{{ .Source }}{{ end }}{{ end }}\'').read().strip()
 
+    # Start x containers
     for x in range(nb_containers):
         os.system(f"docker run --detach --network=astronomy_default -v {source_path}:/data {image_tag}")
 
+    # Extract tags of started containers
     containers = os.popen(f"docker container ls -q -f ancestor={image_tag}").read()
 
     return jsonify({
         'type': 'success',
-        'message': 'Docker started',
+        'message': f'{nb_containers} containers started',
         'containers': containers.split("\n")[:-1]
     })
 
+@app.route('/api/convert_sn/pid', methods=['GET'])
+def image_is_build():
+    # Check if the image building script is running
+    process = os.popen('ps -ef | grep build.py | grep -v grep').read()
+    
+    if process:
+        pid = process.split()[0]
+        return jsonify({
+            'type': 'info',
+            'message': 'Image construction in progress',
+            'pid': pid
+        })
+
+    return jsonify({
+            'type': 'warning',
+            'message': 'No image construction in progress'
+        })
 
 @app.route('/api/active_sn', methods=['GET'])
 def active_supernovas():
@@ -150,8 +197,6 @@ def reset():
 def list_supernovas():
 
     filterData = {"activationDate": {"$ne": None}} if request.args.get('active') else {}
-
-
     sn = sn_collection.find(filterData,{"_id":0})
 
     if not sn:

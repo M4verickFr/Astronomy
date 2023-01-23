@@ -14,27 +14,20 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    {% if new %}
-        <script>
-          Notify("success", "L'extraction est terminée");
-          history.pushState(null, null, `${location.origin}${location.pathname}`);
-        </script>
-    {% endif %}
-    
     <div class="presentation w-100">
         <h1>Supernovas</h1>
         <p>Here are the supernovas that have been discovered by the LSST.</p>
         
         <!-- Boutons -->
-        <button type="button" class="btn btn-dark" id="btn btn-extract-supernova" onclick="extractSupernovas()">
+        <button type="button" class="btn btn-dark" id="btn-extract-supernova" onclick="extractSupernovas()">
           Extraire de nouvelles supernovas
         </button>
 
-        <button type="button" class="btn btn-dark" id="btn btn-detect-supernova" onclick="detectSupernovas()">
+        <button type="button" class="btn btn-dark" id="btn-detect-supernova" onclick="detectSupernovas()">
           Détecter les supernovas
         </button>
 
-        <button type="button" class="btn btn-dark" id="btn btn-place-supernova" onclick="placeSupernovas()">
+        <button type="button" class="btn btn-dark" id="btn-place-supernova" onclick="placeSupernovas()">
           Positionner les supernovas
         </button>
         
