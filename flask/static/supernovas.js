@@ -5,7 +5,26 @@ $.ajax({
     dataType: "json",
     success: data => {
         //console.log(data)
-        for (let d of data){
+
+        // Generate stats
+
+        let sn_stats = document.querySelector(".stats")
+        sn_stats.style.height = '5px';
+
+        let sn_active = document.querySelector(".sn_active");
+        let sn_inactive = document.querySelector(".sn_inactive");
+        let sn_processing = document.querySelector(".sn_processing");
+
+        sn_active.style.width = `${data['sn_active']*100}%`
+        sn_inactive.style.width = `${data['sn_inactive']*100}%`
+        sn_processing.style.width = `${data['sn_processing']*100}%`
+
+        sn_active.style.background = `green`
+        sn_inactive.style.background = `red`
+        sn_processing.style.background = `darkorange`
+
+        // Generate table
+        for (let d of data['t_sn']){
             let tr = document.createElement("tr")
             tr.onclick = function(e){
                 if(!e.target.classList.contains("icon-redirect") &&  !e.target.classList.contains("blue-icon")){

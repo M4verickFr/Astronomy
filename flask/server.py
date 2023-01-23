@@ -195,16 +195,28 @@ def reset():
 
 @app.route('/api/sn', methods=['GET'])
 def list_supernovas():
-
     filterData = {"activationDate": {"$ne": None}} if request.args.get('active') else {}
     sn = sn_collection.find(filterData,{"_id":0})
 
-    if not sn:
-        return jsonify({'error': 'data not found'})
-    
-    t_sn = list(sn)
+    sn_inactive = sn_collection.find({"processingStartDate": None},{"_id":0})
+    sn_active = sn_collection.find({"activationDate": {"$ne": None}},{"_id":0})
+    sn_processing = sn_collection.find({"processingStartDate": {"$ne": None},"activationDate": None},{"_id":0})
 
-    return jsonify(t_sn)
+    if not sn or not sn_inactive or not sn_active or not sn_processing:
+        return jsonify({'error': 'data not found'})
+
+    sn_inactive = len(list(sn_inactive))
+    sn_active = len(list(sn_active))
+    sn_processing = len(list(sn_processing))
+
+    total = sn_inactive+sn_active+sn_processing
+
+    return jsonify({
+        't_sn': list(sn),
+        'sn_inactive': sn_inactive / total,
+        'sn_active': sn_active / total,
+        'sn_processing': sn_processing / total
+    })
 
 @app.route('/api/sn', methods=['PUT'])
 def create_record():
@@ -243,6 +255,21 @@ def query_record(id):
         return jsonify({'error': 'data not found'})
     else:
         return jsonify(supernova.to_json())
+
+@app.route('/api/sn_stats', methods=['GET'])
+def stats_supernovas():
+    sn_inactive = sn_collection.find({"processingStartDate": None},{"_id":0})
+    sn_active = sn_collection.find({"activationDate": {"$ne": None}},{"_id":0})
+    sn_processing = sn_collection.find({"processingStartDate": {"$ne": None},"activationDate": None},{"_id":0})
+
+    if not sn_inactive or not sn_active or not sn_processing:
+        return jsonify({'error': 'data not found'})
+
+    return jsonify({
+        'sn_inactive': len(list(sn_inactive)),
+        'sn_active': len(list(sn_active)),
+        'sn_processing': len(list(sn_processing))
+    })
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=os.environ.get("FLASK_SERVER_PORT", 9090), debug=True)
