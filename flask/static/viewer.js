@@ -46,7 +46,7 @@ A.init.then(() => {
         success: data => {
             const cat = A.catalog({ color: 'red', onClick: 'showTable' });
             var originalSources = [];
-            for (let d of data){
+            for (let d of data["t_sn"]){
                 originalSources.push(
                     A.marker(d.ra_degree, d.decl_degree, {popupTitle: d.name, popupDesc: d.galaxy}),
                 );
