@@ -28,11 +28,9 @@ TODO: Des screens du projet
 
 ## 🛠️ **How to use** 
 
-1️⃣ **Cloner le Git**
+1️⃣ **Clone the Git**
 
-2️⃣ **Assurer-vous que docker est démarre**
-
-3️⃣ **Ensuite, exécutez la commande `docker compose up -d` dans le dossier du projet**
+2️⃣ **Go to the folder and execute `docker compose up -d` to create containers for the project**
 
 ```
 $ docker compose up -d
@@ -48,7 +46,7 @@ Creating nginx-flask-mongo_backend_1 ... done
 Creating nginx-flask-mongo_web_1     ... done
 ```
 
-4️⃣ **Expected result**
+3️⃣ **Expected result**
 
 Listing containers must show three containers running and the port mapping as below:
 ```
@@ -61,7 +59,7 @@ d7eea5481c77        mongo                       "docker-entrypoint.s…"   About
 
 After the application starts, navigate to `http://localhost:81` in your web browser
 
-5️⃣ **Stop and remove the containers**
+4️⃣ **Stop and remove the containers**
 ```
 $ docker compose down
 ```
