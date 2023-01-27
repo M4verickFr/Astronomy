@@ -8,7 +8,6 @@ Spativis is a high quality space viewer designed for astronomy professionals and
 
 With its advanced visualization features, you can see sky objects in their true position in space and understand how they relate to each other. The data displayed in Spativis has been pre-processed for better readability and easy understanding, such as supernovas highlighted for increased visibility.
 
-## 🔥  Features
 ## 👀 Quick overview of our project 
 
 ![localhost_81_](https://user-images.githubusercontent.com/49167110/215061790-6ebc8426-4cbe-442a-9610-e36b5a7f8b04.png)
