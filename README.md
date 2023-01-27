@@ -13,6 +13,10 @@ With its advanced visualization features, you can see sky objects in their true 
 
 ![localhost_81_](https://user-images.githubusercontent.com/49167110/215061790-6ebc8426-4cbe-442a-9610-e36b5a7f8b04.png)
 ![localhost_81_viewer](https://user-images.githubusercontent.com/49167110/215061847-f929b916-143a-4760-9c41-b48bfa40aa07.png)
+![localhost_81_viewer_ra=137 4 decl=33 11666666666667 (1)](https://user-images.githubusercontent.com/49167110/215064039-07c35506-76fe-4358-a0d4-04f7405a221f.png)
+![localhost_81_supernovas (3)](https://user-images.githubusercontent.com/49167110/215063956-6baf1962-c71a-4453-8e90-d63e199dfdf2.png)
+
+
 
 ## ⚙️ Project structure
 
