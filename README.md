@@ -11,7 +11,8 @@ With its advanced visualization features, you can see sky objects in their true 
 ## 🔥  Features
 ## 👀 Quick overview of our project 
 
-![image](https://user-images.githubusercontent.com/49167110/215061679-13bfca75-33ce-49c3-8e1e-fe9b3409f9e1.png)
+![localhost_81_](https://user-images.githubusercontent.com/49167110/215061790-6ebc8426-4cbe-442a-9610-e36b5a7f8b04.png)
+![localhost_81_viewer](https://user-images.githubusercontent.com/49167110/215061847-f929b916-143a-4760-9c41-b48bfa40aa07.png)
 
 ## ⚙️ Project structure
 
