@@ -1,16 +1,20 @@
-# Spativis
+# 🚀🌌 PROJ 932 - Astronomy
 
-## Compose sample application
+[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)  [![forthebadge](http://forthebadge.com/images/badges/powered-by-electricity.svg)](http://forthebadge.com)
 
-### Use with Docker Development Environments
+## 🔍 Overview
 
-You can open this sample in the Dev Environments feature of Docker Desktop version 4.12 or later.
+Spativis is a high quality space viewer designed for astronomy professionals and enlightened amateurs. It offers an immersive and interactive experience to explore the sky and discover the wonders of the universe.
 
-[Open in Docker Dev Environments <img src="../open_in_new.svg" alt="Open in Docker Dev Environments" align="top"/>](https://open.docker.com/dashboard/dev-envs?url=https://github.com/docker/awesome-compose/tree/master/nginx-flask-mongo)
+With its advanced visualization features, you can see sky objects in their true position in space and understand how they relate to each other. The data displayed in Spativis has been pre-processed for better readability and easy understanding, such as supernovas highlighted for increased visibility.
 
-### Python/Flask application with Nginx proxy and a Mongo database
+## 🔥  Features
+## 👀 Quick overview of our project 
 
-Project structure:
+TODO: Des screens du projet 
+
+## ⚙️ Project structure
+
 ```
 .
 ├── compose.yaml
@@ -19,28 +23,16 @@ Project structure:
 │   ├── requirements.txt
 │   └── server.py
 └── nginx
-    └── nginx.conf
-
+    └── nginx.conf
 ```
 
-[_compose.yaml_](compose.yaml)
-```
-services:
-  web:
-    build: app
-    ports:
-    - 80:80
-  backend:
-    build: flask
-    ...
-  mongo:
-    image: mongo
-```
-The compose file defines an application with three services `web`, `backend` and `db`.
-When deploying the application, docker compose maps port 80 of the web service container to port 80 of the host as specified in the file.
-Make sure port 80 on the host is not being used by another container, otherwise the port should be changed.
+## 🛠️ **How to use** 
 
-## Deploy with docker compose
+1️⃣ **Cloner le Git**
+
+2️⃣ **Assurer-vous que docker est démarre**
+
+3️⃣ **Ensuite, exécutez la commande `docker compose up -d` dans le dossier du projet**
 
 ```
 $ docker compose up -d
@@ -54,10 +46,9 @@ Status: Downloaded newer image for nginx:latest
 Creating nginx-flask-mongo_mongo_1 ... done
 Creating nginx-flask-mongo_backend_1 ... done
 Creating nginx-flask-mongo_web_1     ... done
-
 ```
 
-## Expected result
+4️⃣ **Expected result**
 
 Listing containers must show three containers running and the port mapping as below:
 ```
@@ -68,13 +59,30 @@ dba87a080821        nginx-flask-mongo_backend   "./server.py"            About a
 d7eea5481c77        mongo                       "docker-entrypoint.s…"   About a minute ago   Up About a minute   27017/tcp              nginx-flask-mongo_mongo_1
 ```
 
-After the application starts, navigate to `http://localhost:80` in your web browser or run:
-```
-$ curl localhost:80
-Hello from the MongoDB client!
-```
+After the application starts, navigate to `http://localhost:81` in your web browser
 
-Stop and remove the containers
+5️⃣ **Stop and remove the containers**
 ```
 $ docker compose down
 ```
+
+## 🏗️ Developed with
+
+* [Python](https://www.python.org/)
+* [Docker](https://www.mongodb.com/)
+* [MongoDB](https://www.mongodb.com/)
+* [Flask](https://www.mongodb.com/)
+* [AladinLite](https://www.mongodb.com/)
+* [Boostrap](https://nodejs.org/en/)
+* [jQuery](https://nodejs.org/en/)
+
+## 💪 Authors of this project
+
+* **PERROLLAZ Maverick** _alias_ [@M4verickFr](https://github.com/M4verickFr)
+* **KOEBERLE Celien** _alias_ [@caullird](https://github.com/koeberlc)
+* **THESE Doriane** _alias_ [@caullird](https://github.com/thezedoriane)
+* **YAO Xin** _alias_ [@caullird](https://github.com/Xin-YAO1)
+
+
+
+
