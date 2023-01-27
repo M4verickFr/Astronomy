@@ -1,4 +1,4 @@
-# 🚀🌌 PROJ 932 - Astronomy
+# 🚀 PROJ 932 - Astronomy
 
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)  [![forthebadge](http://forthebadge.com/images/badges/powered-by-electricity.svg)](http://forthebadge.com)
 
@@ -11,7 +11,7 @@ With its advanced visualization features, you can see sky objects in their true 
 ## 🔥  Features
 ## 👀 Quick overview of our project 
 
-TODO: Des screens du projet 
+![image](https://user-images.githubusercontent.com/49167110/215061679-13bfca75-33ce-49c3-8e1e-fe9b3409f9e1.png)
 
 ## ⚙️ Project structure
 
