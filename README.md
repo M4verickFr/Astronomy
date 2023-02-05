@@ -71,19 +71,19 @@ $ docker compose down
 ## 🏗️ Developed with
 
 * [Python](https://www.python.org/)
-* [Docker](https://www.mongodb.com/)
+* [Docker](https://www.docker.com/)
 * [MongoDB](https://www.mongodb.com/)
-* [Flask](https://www.mongodb.com/)
-* [AladinLite](https://www.mongodb.com/)
-* [Boostrap](https://nodejs.org/en/)
-* [jQuery](https://nodejs.org/en/)
+* [Flask](https://flask.palletsprojects.com/)
+* [AladinLite]https://aladin.u-strasbg.fr/AladinLite/)
+* [Boostrap](https://getbootstrap.com/)
+* [jQuery](https://jquery.com/)
 
 ## 💪 Authors of this project
 
 * **PERROLLAZ Maverick** _alias_ [@M4verickFr](https://github.com/M4verickFr)
-* **KOEBERLE Celien** _alias_ [@caullird](https://github.com/koeberlc)
-* **THESE Doriane** _alias_ [@caullird](https://github.com/thezedoriane)
-* **YAO Xin** _alias_ [@caullird](https://github.com/Xin-YAO1)
+* **KOEBERLE Celien** _alias_ [@koeberlc](https://github.com/koeberlc)
+* **THESE Doriane** _alias_ [@thezedoriane](https://github.com/thezedoriane)
+* **YAO Xin** _alias_ [@Xin-YAO1](https://github.com/Xin-YAO1)
 
 
 
