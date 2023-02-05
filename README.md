@@ -74,7 +74,7 @@ $ docker compose down
 * [Docker](https://www.docker.com/)
 * [MongoDB](https://www.mongodb.com/)
 * [Flask](https://flask.palletsprojects.com/)
-* [AladinLite]https://aladin.u-strasbg.fr/AladinLite/)
+* [AladinLite](https://aladin.u-strasbg.fr/AladinLite/)
 * [Boostrap](https://getbootstrap.com/)
 * [jQuery](https://jquery.com/)
 
